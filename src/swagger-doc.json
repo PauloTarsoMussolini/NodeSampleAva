@@ -1,0 +1,568 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "API responsável por administrar o smart contract de criação e registro de apólices (Policy Factory) na blockchain. Também realiza a consulta nas apólices e a alteração do status de cada apólice.",
+    "version": "1.0.0",
+    "title": "HBTrust.domain.policy",
+    "contact": {
+      "email": "factory@4cadia.com"
+    }
+  },
+  "paths": {
+    "/": {
+      "get": {
+        "tags": [
+          "version"
+        ],
+        "description": "Versão da API",
+        "summary": "Retorna versão da API",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "success"
+          }
+        }
+      }
+    },
+    "/policy": {
+      "post": {
+        "tags": [
+          "Policy"
+        ],
+        "summary": "Retorna todas informações da Apólice registrada na Blockchain.",
+        "description": "Retorna dados da apólice",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Informe a Chave Privada do Solicitante da Informação e o Endereço da Apólice",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/PolicyGet"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "success"
+          },
+          "500": {
+            "description": "error"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Policy"
+        ],
+        "summary": "Atualiza status da Apólice",
+        "description": "Altera o valor do status da apólice na blockchain",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Parâmetros requeridos para a Operação na blockchain",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/PolicyPut"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "success"
+          },
+          "500": {
+            "description": "error"
+          }
+        }
+      }
+    },
+    "/admin": {
+      "get": {
+        "tags": [
+          "Admin Policy Factory"
+        ],
+        "summary":"Consulta Admin",
+        "description": "Consulta se um address é administrador no smart contract de criação e registro de Apólices (Policy Factory)",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "addressWallet",
+            "in": "query",
+            "description": "Informe o Endereço na Blockchain",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }   
+        ],
+        "responses": {
+          "200": {
+            "description": "success"
+          },
+          "500": {
+            "description": "error"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Admin Policy Factory"
+        ],
+        "summary": "Adiciona Admin",
+        "description": "Adiciona um administrador no smart contract de criação e registro de Apólices (Policy Factory)",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "required params to set information into the blockchain",
+            "required": true
+            ,"schema": {
+              "$ref": "#/definitions/AdminPostPut"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "success"
+          },
+          "500": {
+            "description": "error"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Admin Policy Factory"
+        ],
+        "summary":"Remove Admin",
+        "description": "Remove um administrador no smart contract de criação e registro de Apólices (Policy Factory)",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Parâmetros necessários",
+            "required": true
+            ,"schema": {
+              "$ref": "#/definitions/AdminPostPut"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "success"
+          },
+          "500": {
+            "description": "error"
+          }
+        }
+      }
+    },
+    "/factory": {
+      "post": {
+        "tags": [
+          "Factory Policy"
+        ],
+        "summary": "Gerar Apólice",
+        "description": "Cria e registra a apólice na blockchain.",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Parâmetros necessários",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Policy"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "success"
+          },
+          "500": {
+            "description": "error"
+          }
+        }
+      }
+    },
+    "/mutual": {
+      "post": {
+        "tags": [
+          "Mutual"
+        ],
+        "description": "Lista as Apólices da Mútua registradas na Blockchain",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Informe a Chave Privada do Solicitante da Informação e o Endereço da Mútua",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/MutualPost"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "success"
+          },
+          "500": {
+            "description": "error"
+          }
+        }
+      }
+    },
+    "/mutualPolicy" : {
+      "get": {
+        "tags": [
+          "MutualPolicy"
+        ],
+        "summary": "Lista Apólices da Mutual",
+        "description": "Lista todas as Apólices da Mutual registradas na Blockchain.",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "privateKey",
+            "in": "query",
+            "description": "Informe a Chave Privada do Solicitante da Informação",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+           {
+            "name": "addressMutual",
+            "in": "query",
+            "description": "Informe Endereço da Mutual na Blockchain",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }    
+        ],
+        "responses": {
+          "200": {
+            "description": "success"
+          },
+          "500": {
+            "description": "error"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "SetPolicyRequest": {
+      "type": "object",
+      "properties": {
+        "policyAddress": {
+          "type":"string"
+        }
+      }
+    },
+    "Status": {
+      "type": "object",
+      "properties": {
+        "privateKey": {
+          "type": "string"
+        },
+        "status": {
+          "type":"string"
+        }
+      } 
+    },
+    "Mutual": {
+        "type": "object",
+        "properties": {
+          "wallets": {
+          "properties": {
+            "address": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "Coverages":{
+      "type": "object",
+      "properties": {
+        "prizeAmount":{
+          "type": "string"
+        },
+        "fipePercentage": {
+          "type": "string"
+        },
+        "app": {
+          "type": "string"
+        },
+        "glasses": {
+          "type": "string"
+        },
+        "rcfMaterials": {
+          "type": "string"
+        },
+        "rcfBodily":{
+          "type": "string"
+        },
+        "reserveCar": {
+          "type": "string"
+        },
+        "franchise":{
+          "type": "string"
+        },
+        "productCoverage": {
+          "properties": {
+            "coverages": {
+              "type": "string"
+            }
+          }
+        }
+      }
+
+     },
+    "PolicyInformation":{
+      "type": "object",
+      "properties": {
+        "proposal": {
+          "type": "string"
+        },
+        "apolice": {
+          "type": "string"
+        },
+        "startValidity": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "endValidity": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "apoliceStatus":{
+          "type": "string"
+        }
+      }
+    },
+    "PolicyHoldedrData":{
+      "type": "object",
+      "properties": {
+        "nameComplete": {
+          "type": "string"
+        },
+        "dateOfBirth": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "maritalStatus": {
+          "type": "string"
+        },
+        "pocket": {
+          "type": "string"
+        },
+        "cnpjCpf":{
+          "type": "string"
+        },
+        "gender": {
+          "type": "string"
+        },
+        "relationshipPolicyHolder":{
+          "type": "string"
+        }
+      }
+    },
+    "VehicleData":{
+      "type": "object",
+      "properties": {
+        "type":{
+          "type": "string"
+        },
+        "maker": {
+          "type": "string"
+        },
+        "model": {
+          "type": "string"
+        },
+        "numerSlides": {
+          "type": "string"
+        },
+        "yearManufacture": {
+          "type": "string"
+        },
+        "yearModel": {
+          "type": "string"
+        },
+        "licensePlate": {
+          "type": "string"
+        },
+        "chassis": {
+          "type": "string"
+        },
+        "renavam":{
+          "type": "string"
+        },
+        "fuel": {
+          "type": "string"
+        },
+        "newVehicle": {
+          "type": "string"
+        },
+        "vehicleFinaced":{
+          "type": "string"
+        },
+        "color": {
+          "type": "string"
+        }
+      }
+    },
+    "DriverData":{
+      "type": "object",
+      "properties": {
+        "nameComplete": {
+          "type": "string"
+        },
+        "dateOfBirth": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "maritalStatus": {
+          "type": "string"
+        },
+        "pocket": {
+          "type": "string"
+        },
+        "cnpjCpf":{
+          "type": "string"
+        },
+        "gender": {
+          "type": "string"
+        },
+        "profession": {
+          "type": "string"
+        },
+        "cnh": {
+          "type": "string"
+        },
+        "dateFirstCnh": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "garage": {
+          "type": "string"
+        },
+        "usesWork": {
+          "type": "string"
+        },
+        "vehicleUse": {
+          "type": "string"
+        }
+      }
+    },
+    "Policy": {
+      "type": "object",
+      "properties": {
+        "privateKey": {
+          "type": "string"
+        },
+        "mutual": {
+          "$ref": "#/definitions/Mutual"
+        },
+        "coverages": {
+          "$ref": "#/definitions/Coverages"
+        },
+        "policyInformation":{
+          "$ref": "#/definitions/PolicyInformation"
+        },
+        "policyHoldedrData":{
+          "$ref": "#/definitions/PolicyHoldedrData"
+        },          
+        "vehicleData":{
+          "$ref": "#/definitions/VehicleData"
+        },
+        "driverData":{
+          "$ref": "#/definitions/DriverData"
+        }
+      }
+      
+    },
+    "PolicyGet": {
+      "type": "object",
+      "properties": {
+        "privateKey": {
+          "type": "string"
+        },
+        "addressPolicy": {
+          "type": "string"
+        }
+      } 
+    },
+    "PolicyPut": {
+      "type": "object",
+      "properties": {
+        "privateKey": {
+          "type": "string"
+        },
+        "addressPolicy": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        }
+      } 
+    },
+    "AdminGet": {
+      "type": "object",
+      "properties": {
+        "account": {
+          "type": "string"
+        }
+      } 
+    },
+    "AdminPostPut": {
+      "type": "object",
+      "properties": {
+        "privateKey": {
+          "type": "string"
+        },
+        "address": {
+          "type": "string"
+        }
+      }
+    },
+    "MutualPost": {
+      "type": "object",
+      "properties": {
+        "privateKey": {
+          "type": "string"
+        },
+        "addressMutual": {
+          "type": "string"
+        }
+      } 
+    }
+  }
+}
